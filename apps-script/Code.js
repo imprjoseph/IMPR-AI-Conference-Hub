@@ -40,6 +40,9 @@ function doPost(e) {
       throw apiError("NOT_FOUND", "不支援的公開 API 動作");
     var question = validateQuestion(payload);
     enforceRateLimit(question.client_id, action, true);
+    if (!readPublicRecords("Settings", question.event_code).length) {
+      throw apiError("NOT_FOUND", "找不到可公開提問的活動");
+    }
     return jsonResponse(
       true,
       createQuestion(question, context.requestId),

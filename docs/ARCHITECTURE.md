@@ -19,6 +19,8 @@ flowchart LR
 4. 公開讀取使用 `CacheService`。試算表變更後最長可能等待 `CACHE_SECONDS` 才反映；緊急更新可從 Apps Script 清除 Script Cache 或調低 TTL。
 5. AuditLog 不記錄完整提問或請求內容，只記錄雜湊識別碼、動作、結果與資源 ID。
 6. 管理初始化函式不在 `doGet`／`doPost` 路由中，匿名部署無法呼叫。
+7. React 前端從環境變數取得公開 Web App URL 與活動代碼；未設定時不顯示任何虛構活動資料。
+8. 瀏覽器只保存隨機匿名 `client_id` 供簡易限流，不保存姓名、電話或 Email。
 
 ## 個資隔離
 

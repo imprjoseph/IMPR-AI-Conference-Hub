@@ -18,6 +18,9 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-latest
+    env:
+      VITE_APPS_SCRIPT_WEB_APP_URL: ${{ vars.VITE_APPS_SCRIPT_WEB_APP_URL }}
+      VITE_EVENT_CODE: ${{ vars.VITE_EVENT_CODE }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -35,6 +38,9 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: quality
     runs-on: ubuntu-latest
+    env:
+      VITE_APPS_SCRIPT_WEB_APP_URL: ${{ vars.VITE_APPS_SCRIPT_WEB_APP_URL }}
+      VITE_EVENT_CODE: ${{ vars.VITE_EVENT_CODE }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

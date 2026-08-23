@@ -157,7 +157,13 @@ function createHarness() {
         ...Buffer.from(value.padEnd(32, "0").slice(0, 32)),
       ],
       getUuid: () => `uuid-${++uuidCounter}`,
+      formatDate: (value, _timezone, pattern) => {
+        if (pattern === "yyyy-MM-dd") return value.toISOString().slice(0, 10);
+        if (pattern === "HH:mm") return value.toISOString().slice(11, 16);
+        return value.toISOString();
+      },
     },
+    Session: { getScriptTimeZone: () => "Asia/Taipei" },
     LockService: {
       getScriptLock: () => ({ waitLock: () => {}, releaseLock: () => {} }),
     },
@@ -322,5 +328,16 @@ test("question text length is capped at 1000 characters", () => {
         client_id: "client_123456",
       }),
     /不得超過 1000/,
+  );
+});
+
+test("sheet dates and times are normalized according to their schema types", () => {
+  const { context } = createHarness();
+  const value = new Date("2026-10-01T09:30:00.000Z");
+  assert.equal(context.normalizeCellValue(value, "date"), "2026-10-01");
+  assert.equal(context.normalizeCellValue(value, "time"), "09:30");
+  assert.equal(
+    context.normalizeCellValue(value, "datetime"),
+    "2026-10-01T09:30:00.000Z",
   );
 });

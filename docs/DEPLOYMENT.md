@@ -27,7 +27,7 @@ RATE_LIMIT_READS=60
 RATE_LIMIT_WRITES=8
 ```
 
-不要在 Sheets 儲存任何 API 金鑰。第一階段沒有 OpenAI 呼叫，不需要設定 `OPENAI_API_KEY`。
+不要在 Sheets 儲存任何 API 金鑰。前兩階段沒有 OpenAI 呼叫，不需要設定 `OPENAI_API_KEY`。
 
 ## 3. 建立工作表
 
@@ -78,7 +78,16 @@ function setupMyEvent() {
 1. 將 repository 名稱設為 `IMPR-AI-Conference-Hub`；若不同，修改 `frontend/vite.config.ts` 的 `base`。
 2. Repository Settings → Pages → Source 選 GitHub Actions。
 3. 推送 `main`。`quality` job 全部通過後才會執行 deploy。
-4. 若前端需要 API，在 GitHub Actions repository variable 或建置環境加入 `VITE_APPS_SCRIPT_WEB_APP_URL`；它是公開 URL，不是祕密。
+4. 在 GitHub Repository Settings → Secrets and variables → Actions → Variables 設定：
+
+   ```text
+   VITE_APPS_SCRIPT_WEB_APP_URL=https://script.google.com/macros/s/DEPLOYMENT_ID/exec
+   VITE_EVENT_CODE=EVENT-2026
+   ```
+
+   兩者都會進入公開前端；只能放公開 Web App URL 與非敏感活動代碼，不能放金鑰或試算表 ID。
+
+5. 重新執行 workflow 或推送新提交，確認網站不再顯示「活動資料服務設定中」。
 
 ## 回復
 

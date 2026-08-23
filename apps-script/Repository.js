@@ -3,6 +3,7 @@ function getSpreadsheet() {
 }
 
 function sheetRowsToObjects(sheetName) {
+  var schema = getSheetSchema(sheetName);
   var sheet = getSpreadsheet().getSheetByName(sheetName);
   if (!sheet)
     throw apiError("CONFIGURATION_ERROR", "找不到工作表：" + sheetName);
@@ -19,14 +20,32 @@ function sheetRowsToObjects(sheetName) {
     .map(function (row) {
       var record = {};
       headers.forEach(function (header, index) {
-        record[header] = normalizeCellValue(row[index]);
+        var field = schema.fields.filter(function (candidate) {
+          return candidate.name === header;
+        })[0];
+        record[header] = normalizeCellValue(
+          row[index],
+          field ? field.type : "string",
+        );
       });
       return record;
     });
 }
 
-function normalizeCellValue(value) {
-  if (value instanceof Date) return value.toISOString();
+function normalizeCellValue(value, type) {
+  if (value instanceof Date) {
+    if (type === "date") {
+      return Utilities.formatDate(
+        value,
+        Session.getScriptTimeZone(),
+        "yyyy-MM-dd",
+      );
+    }
+    if (type === "time") {
+      return Utilities.formatDate(value, Session.getScriptTimeZone(), "HH:mm");
+    }
+    return value.toISOString();
+  }
   return value;
 }
 

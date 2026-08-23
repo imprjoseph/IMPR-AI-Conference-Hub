@@ -74,6 +74,12 @@ Content-Type: text/plain;charset=utf-8
 
 成功只回傳 `question_id` 與 `moderation_status=pending`，不回傳原文。每次成功寫入同時產生不含提問內容的 AuditLog。
 
+伺服器會先確認該 `event_code` 至少有一筆已發布且公開的 Settings；不存在或尚未發布的活動不能接受匿名提問。
+
+## 前端串接
+
+`frontend/src/api.ts` 會平行讀取五種公開資料。瀏覽器只保存隨機產生的 `client_id`，不使用姓名、Email 或裝置指紋。若 API URL 或活動代碼未設定，前端顯示設定中狀態，不建立或補寫日期、地點、講者等未確認資訊。
+
 ## 錯誤碼
 
 | 代碼                  | 說明                               |

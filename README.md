@@ -1,8 +1,8 @@
 # IMPR AI Conference Hub
 
-供國際會議、政府論壇及金融保險研討會使用的雙語活動資訊基礎平台。第一階段建立 React 前端骨架、Google Sheets 資料架構、Google Apps Script 公開 API、安全控制、自動化測試與 GitHub Pages 部署流程。
+供國際會議、政府論壇及金融保險研討會使用的雙語活動資訊平台。第一階段建立資料架構與安全 API；第二階段完成公開活動資訊、議程、講者、FAQ、專有名詞及匿名觀眾提問介面。
 
-> 範圍聲明：本階段**未呼叫 AI 模型**。未來 AI 功能將使用 OpenAI Responses API，模型名稱由伺服器端環境變數或 Apps Script Properties 設定；任何 AI 產出均須標示「AI 初稿」並經人工審核。API 金鑰不得放入前端、GitHub Pages、Google Sheets 或公開儲存庫。OpenAI 官方文件要求 API 金鑰只在伺服器端由環境變數或金鑰管理服務載入。
+> 範圍聲明：前兩階段**未呼叫 AI 模型**。未來 AI 功能將使用 OpenAI Responses API，模型名稱由伺服器端環境變數設定；任何 AI 產出均須標示「AI 初稿」並經人工審核。API 金鑰不得放入前端、GitHub Pages、Google Sheets 或公開儲存庫。
 
 ## 目錄結構
 
@@ -27,11 +27,16 @@
 │   └── TESTING.md
 ├── frontend/
 │   ├── public/impr-logo.png
+│   ├── src/api.ts                  # 公開 API client 與匿名 client ID
 │   ├── src/App.tsx
 │   ├── src/main.tsx
 │   ├── src/styles.css
+│   ├── src/types.ts                # Sheets 公開資料型別
+│   ├── src/useEventData.ts         # 載入、錯誤與重試狀態
 │   └── Vite／TypeScript 設定
-├── tests/apps-script.test.mjs
+├── tests/
+│   ├── apps-script.test.mjs
+│   └── mock-api-server.mjs         # 僅供本機視覺驗收
 ├── eslint.config.js
 └── package.json
 ```
@@ -47,7 +52,14 @@ npm run check
 npm run dev
 ```
 
-前端預設位於 `http://localhost:5173`。第一階段前端只呈現雙語平台基礎頁，不包含後續 AI 問答、翻譯、摘要或語音功能。
+前端預設位於 `http://localhost:5173/IMPR-AI-Conference-Hub/`。建立 `.env` 並設定公開 Web App URL 與活動代碼：
+
+```text
+VITE_APPS_SCRIPT_WEB_APP_URL=https://script.google.com/macros/s/DEPLOYMENT_ID/exec
+VITE_EVENT_CODE=IMPR-DEMO
+```
+
+未設定時，網站只顯示「活動資料服務設定中」，不會用虛構內容代替正式資料。
 
 ## 建立活動試算表
 
@@ -79,7 +91,7 @@ npm run dev
 
 ## 設定值
 
-`.env.example` 只列名稱，不含真實值。前端只可使用 `VITE_APPS_SCRIPT_WEB_APP_URL`；任何 `VITE_` 變數都會進入公開建置，絕不可放金鑰。
+`.env.example` 只列名稱，不含真實值。前端只可使用 `VITE_APPS_SCRIPT_WEB_APP_URL` 與 `VITE_EVENT_CODE`；任何 `VITE_` 變數都會進入公開建置，絕不可放金鑰。
 
 Apps Script Properties：
 
@@ -95,7 +107,7 @@ Apps Script Properties：
 
 ## CI 與 GitHub Pages
 
-推送至 `main` 後，GitHub Actions 會依序執行 Prettier、ESLint、TypeScript、Apps Script 測試與 Vite production build；全部通過才部署 `frontend/dist` 至 GitHub Pages。首次使用需在 Repository Settings → Pages 將 Source 設為 **GitHub Actions**。
+推送至 `main` 後，GitHub Actions 會依序執行 Prettier、ESLint、TypeScript、Apps Script 與前端 API 測試、Vite production build；全部通過才部署 `frontend/dist` 至 GitHub Pages。Repository Variables 必須設定 `VITE_APPS_SCRIPT_WEB_APP_URL` 與 `VITE_EVENT_CODE`。
 
 若儲存庫名稱不是 `IMPR-AI-Conference-Hub`，請修改 `frontend/vite.config.ts` 的 `base`。
 
@@ -115,7 +127,6 @@ Apps Script 請在 Deploy → Manage deployments 選取前一個已驗證版本�
 
 - OpenAI 問答、翻譯、分類、摘要、語音與用量計費串接
 - AI 提示詞版本管理、評測與人工審核介面
-- 活動網站的議程／講者／FAQ 完整互動頁與 API 串接
 - 管理後臺、登入、角色權限與內部審核工作流
 - 報名個資系統、付款、電子郵件與行事曆整合
 - WAF／API Gateway 等正式環境強式限流

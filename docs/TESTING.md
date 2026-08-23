@@ -8,7 +8,8 @@
 2. ESLint（前端、Apps Script 與測試）。
 3. React／TypeScript 型別檢查。
 4. Node test runner 內的 Apps Script 模擬整合測試。
-5. Vite production build。
+5. Vitest 前端 API 契約測試。
+6. Vite production build。
 
 Apps Script 測試涵蓋：
 
@@ -19,6 +20,15 @@ Apps Script 測試涵蓋：
 - 成功提交會建立不含提問全文的 AuditLog。
 - 無效 JSON 使用統一錯誤 envelope。
 - 提問文字上限 1,000 字元。
+- Sheets 日期與時間會依 schema 正規化為 `YYYY-MM-DD` 與 `HH:mm`。
+
+前端 API 測試涵蓋：
+
+- 五種公開資料並行載入，附帶 `event_code` 與匿名 `client_id`。
+- 議程依 `sort_order` 排序。
+- 提問以 `text/plain` 傳送，只含匿名提問契約欄位。
+- API 錯誤碼與 `request_id` 可供介面顯示及除錯。
+- 瀏覽器識別碼不使用姓名、Email 或其他個資。
 
 ## Google 實機驗收清單
 
@@ -31,6 +41,9 @@ CI 無法取代 Google Apps Script 實際授權與部署，部署者需完成：
 - [ ] POST submitQuestion 後 Questions 與 AuditLog 各新增一列。
 - [ ] 連續超過設定上限時收到 `RATE_LIMITED`。
 - [ ] 測試 deployment 回傳 `meta.mode=test`，正式 deployment 回傳 `production`。
+- [ ] GitHub Pages 可載入活動設定、議程、講者、FAQ 與專有名詞。
+- [ ] 繁中／英文切換後顯示對應欄位，缺翻譯時才使用另一語言內容。
+- [ ] 桌機與 375px 手機寬度沒有水平溢位。
 
 ## 已知限制與風險
 
