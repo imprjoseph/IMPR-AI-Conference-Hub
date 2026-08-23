@@ -100,8 +100,8 @@ main {
 h1 {
   max-width: 15ch;
   margin: 0;
-  font-size: clamp(3rem, 6.2vw, 6.75rem);
-  line-height: 0.98;
+  font-size: clamp(2.6rem, 5.2vw, 5.75rem);
+  line-height: 1.12;
   letter-spacing: -0.055em;
   white-space: pre-line;
 }

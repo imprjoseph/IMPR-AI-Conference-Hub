@@ -7,7 +7,7 @@ const copy = {
     body: "整合活動資料、雙語議程、講者資訊與觀眾提問的安全基礎平台。第一階段已完成資料架構與公開 API。",
     badge: "Phase 1 · Foundation",
     cards: [
-      ["單一資料來源", "Google Sheets 管理活動內容，公開與內部資料明確分流。"],
+      ["單一資料來源", "集中管理活動內容，公開資訊與內部作業資料明確分流。"],
       [
         "安全公開 API",
         "只回傳核准公開欄位，輸入驗證、速率限制與稽核紀錄一併到位。",
@@ -24,7 +24,7 @@ const copy = {
     cards: [
       [
         "One source of truth",
-        "Manage event content in Google Sheets with a clean boundary between public and internal data.",
+        "Manage event content centrally with a clear boundary between public information and internal operations.",
       ],
       [
         "Public API by design",
