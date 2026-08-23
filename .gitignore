@@ -7,5 +7,5 @@ frontend/dist/
 .DS_Store
 .clasp.json
 coverage/
+outputs/
 *.log
-

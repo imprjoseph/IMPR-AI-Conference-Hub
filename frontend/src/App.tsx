@@ -267,8 +267,7 @@ export default function App() {
   const { data, error, loading, retry } = useEventData();
   const content = interfaceCopy[language];
   const settings = data?.settings ?? [];
-  const eventTitle =
-    settingValue(settings, "event_name", language) || content.fallbackTitle;
+  const eventName = settingValue(settings, "event_name", language);
   const eventSummary =
     settingValue(settings, "event_summary", language) || content.intro;
   const eventDate = settingValue(settings, "event_date", language);
@@ -319,7 +318,8 @@ export default function App() {
             )}
           </div>
           <p className="eyebrow">{content.eyebrow}</p>
-          <h1>{eventTitle}</h1>
+          {eventName && <p className="event-name">{eventName}</p>}
+          <h1>{content.fallbackTitle}</h1>
           <p className="intro">{eventSummary}</p>
           {(eventDate || eventVenue) && (
             <div className="event-meta">
